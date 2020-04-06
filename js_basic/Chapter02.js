@@ -236,18 +236,18 @@ obj4.c = 3;
 delete obj4.c;
 
 //是否包含属性
-console.log('b' in obj4); //true
+// console.log('b' in obj4); //true
 
 //遍历属性(及值)
 for (var key in obj4) {
-    if (obj4.hasOwnProperty(key)) { //检查是否对象自身的属性
-        console.log(key + ": " + obj4[key]); //a: 1   b: 2
+    if (obj4.hasOwnProperty(key)) { //检查是否是对象自身的属性
+        // console.log(key + ": " + obj4[key]); //a: 1   b: 2
     }
 }
 
 //获取对象本身的属性的数组
 var strArray = Object.keys(obj4);
-console.log(strArray) //[ 'a', 'b' ]
+// console.log(strArray) //[ 'a', 'b' ]
 
 /*
     对象：一组键值对的集合;
@@ -265,11 +265,325 @@ console.log(strArray) //[ 'a', 'b' ]
         2，不仅遍历对象自身的属性，还会遍历继承的属性；
  */
 
+/**
+ * 函数
+ */
+
+//函数声明有3种方式:
+function print(s) {
+    console.log(s)
+}
+
+/*
+    匿名函数：是一个表达式，最后需要加上分号
+    若指定函数名，则只在函数内部可用。例如：递归调用
+ */
+var p = function (s) {
+    console.log(s);
+};
+
+/*
+    Function的构造函数（不推荐使用）：
+        构造函数参数是String数组；
+        最后一个参数函数体，其他都是函数参数；
+        可以省略new；
+
+ */
+var p1 = new Function('x', 'y', 'return x + y');
+
+// print(1);
+// p(2);
+// console.log(p1(1, 2));
 
 
+function f3(x, y) {
+    return x +y
+}
+//函数赋值给变量
+var operator = f3;
+//函数作为参数和返回值
+function f4(func) {
+    return func;
+}
+
+// console.log(operator(1, 2)); //3
+// console.log(f4(operator)(2, 3)); //5
+
+/*
+    由于函数提升的原因，后面声明的函数会覆盖前面的函数。(前面的函数会完全失效)
+
+    JS将函数作为一个值，可以向字符串，数值和布尔值那样使用；
+ */
+
+function f5(x, y) {
+    console.log(x + y)
+}
+
+//返回函数的源码(包括函数的声明)
+// console.log(f5.toString());
+//返回函数名
+// console.log(f5.name); //f5
+//返回函数定义的参数
+// console.log(f5.length); //2
+
+//原生函数的函数体返回：[native code]
+// console.log(Math.sqrt.toString());
+//function sqrt() { [native code] }
 
 
+function foo(x) {
+    if (x > 100) {
+        var temp = x - 100;
+    }
+}
+// 等价于
+function foo1(x) {
+    var temp;
+    if (x > 100) {
+        temp = x - 100;
+    }
+}
 
+//测试函数作为顶层函数
+var a = 100;
+var x = function () {
+    // console.log(a)
+};
+
+function foo2() {
+    var a = 2;
+    x()
+}
+
+foo2(); //100
+
+//测试函数作为函数内的值
+var a1 = 100;
+
+function foo3() {
+    var a1 = 200;
+    function inner() {
+        console.log(a1)
+    }
+    return inner();
+}
+
+// foo3(); //200
+
+/*
+    作用域：变量存在的范围。
+
+    ES5规范中，JS中两种作用域：
+        1，全局作用域：变量在整个程序中存在，所有地方都可以读取；
+        2，函数作用域：变量只在函数中存在；
+        3，块级作用域(ES6新加入)
+
+    函数中的局部变量，会在函数中覆盖同名的全局变量；
+
+    函数作用域内的局部变量，也有变量提升，变量声明会在函数体的头部；
+
+    函数本身是个值，也有作用域：
+        作为顶层函数，则是全局的作用域；
+        作为函数内部的函数，则是局部作用域；
+
+    调用函数的时候，可以省略参数，省略参数的值则是undefined;
+        只能省略后面的参数，一定要省略前面的参数可以传入undefined；
+ */
+
+var p = 1;
+function f6(value) {
+    value = 2;
+}
+
+f6(p); //1
+// console.log(p);
+
+
+var array = [1, 2, 3];
+function f7(value) {
+    value[3] = 4
+}
+
+function f8(value) {
+    value = [1]
+}
+
+f7(array);
+// console.log(array); //[ 1, 2, 3, 4 ]
+
+//value重新指向一个地址，array则是指向另一个地址
+f8(array);
+// console.log(array); //[ 1, 2, 3, 4 ]
+
+
+function f9(a, a) {
+    console.log(a); //2
+}
+// f9(1, 2);
+
+
+function f10(a, a) {
+    console.log(arguments[0]); //1
+    console.log(arguments[1]); //2
+}
+// f10(1, 2);
+
+
+function f11(a, b) {
+    arguments[0] = 2;
+    arguments[1] = 3;
+    console.log(a + b)
+}
+// f11(1, 1); //5
+
+function f12(a, b) {
+    'use strict';
+    arguments[0] = 2;
+    arguments[1] = 3;
+    console.log(a + b)
+}
+// f12(1, 1); //2
+
+function f13(a, b, c) {
+    console.log(arguments.length); //1
+    console.log(f13.length); //3
+}
+// f13(1);
+
+//argument转化为数组
+function f14(a, b) {
+    Array.prototype.slice.call(arguments)
+
+    //或
+    var args = [];
+    for (var i = 0; i < arguments.length; i++) {
+        args.push(arguments[i])
+    }
+}
+
+var ff = function () {
+    console.log(ff === arguments.callee);
+};
+// ff(); //true
+
+/*
+    函数分为值传递和引用传递。
+        值传递：传入函数的是值的拷贝，无论怎么修改都不会影响原始的值。例如：数值，字符串，布尔值
+        引用传递：传入的是原始值的地址，函数内部修改将会影响原始的值。例如：数组，对象，其他函数。
+
+    函数中的同名参数，函数内部取最后一个；
+        解决办法：使用arguments[0]，arguments[1]
+
+    arguments：不是数组，是一个对象。可以修改函数参数的值。
+        若加上开启严格模式，则无法影响到函数实际参数;
+        arguments.length可以获取调用函数时有几个参数；
+ */
+
+//在函数外部访问，函数内部的变量
+function f15() {
+    var n = 999;
+    function f16() {
+        console.log(n)
+    }
+
+    return f16;
+}
+
+//简写后代码：
+function fff() {
+    var n = 1000;
+    return function () {
+        console.log(n);
+    }
+}
+
+//返回f16函数的值
+var result = f15();
+//调用f16函数
+// result(); //999
+
+//fff()返回一个函数
+// fff()(); //1000
+
+
+//让函数的变量始终保存在内存中的示例：
+function createIncrementor(start) {
+    return function () {
+        console.log(start++)
+    }
+}
+var result1 = createIncrementor(1);
+//调用闭包
+// result1(); //1
+// result1(); //2
+// result1(); //3
+
+
+function Person(name) {
+    var _age;
+    function setAge(n) {
+        _age = n
+    }
+
+    function getAge() {
+        return _age;
+    }
+
+    //结合了对象的语法
+    return {
+        'name': name,
+        'getAge': getAge,
+        'setAge': setAge
+    }
+}
+//返回的是一个对象
+var person = Person("Tom");
+person.setAge(21);
+console.log(person.name); //Tom
+console.log(person.getAge()); //21
+
+//立即调用的函数表达式
+// function f16() {}()  //编译报错
+(function f16() {}());  //编译正常
+(function f16() {})(); //编译正常
+var g = function f16() {}(); //编译正常
+
+
+/*
+    JS语言有"链式作用域"结构：父对象的所有变量对子对象可见，反之则不成立；
+
+    闭包：定义在一个函数内部的函数。例如f16函数；
+        本质：连接函数内部和外部的桥梁；
+        用处：
+            读取函数内部的变量；
+            让这些变量始终保持在内存中，即闭包可以使它的诞生环境(f15函数)一直存在；
+
+    如何理解函数：
+        1，函数声明：可以作为一个值使用，拿到函数的引用可以调用函数本身。
+            赋值一个变量：匿名函数;
+            函数名就是它的引用：function声明了函数名的情况；
+        2，函数的返回值，可以是函数引用。例如：闭包
+        注意：函数声明的结果：函数引用；
+             调用函数的结果：函数体里return语句返回的值；
+
+     闭包的另一个用处：封装对象的私有属性和私有方法；
+
+     闭包的缺点：外层函数每次运行，都会生成一个新的闭包。由于闭包保存着外层函数的变量，因此内存消耗比较大。
+        避免滥用闭包，否则会造成一定的性能的问题；
+
+    直接调用函数的表达式作用：
+        1，不必为函数命名，避免污染全局变量；
+        2，封装一些外部无法读取的私有变量；
+
+    function关键字出现行首，一律解释成语句。对于函数的定义来说，最后不能是();
+        解决办法：用()包起来，让引擎将其理解为一个表达式。于是。声明方法的同时直接调用方法；
+ */
+
+//打印：log
+eval('console.log("log")');
+/*
+    eval函数：接受一个字符串作为参数，并将其作为语句执行；
+ */
 
 
 
