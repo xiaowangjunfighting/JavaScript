@@ -604,6 +604,40 @@ console.log(array1()); //[ 1, 2, [Function (anonymous)] ]
 array1()[2](); //I am a function
 console.log(typeof array1()); //object
 
+var arrry2 = [];
+arrry2[100] = 1;
+console.log(arrry2.length); //101
+
+var array3 = [1, 2];
+array3.length = 3;
+console.log(array3[2]); //undefined
+
+array3.length = 0;
+console.log(array3); //[]
+
+console.log("---数组的空位---")
+
+//数组的空位
+var array4 = [, , ,];
+console.log(array4.length); //3
+console.log(array4); //[ <3 empty items> ]
+console.log(array4[1]); //undefined
+
+var array5 = [1, 2, 3];
+delete array5[0]; //delete命令删除元素形成空位
+console.log(array5.length); //3
+console.log(array5[0]); //undefined
+
+var array6 = [10, 20, 30];
+array6.forEach(function (value) {
+    console.log(value);
+}); //10, 20, 30
+
+
+for (var key in array6) {
+    console.log(key);
+} //0, 1, 2
+
 /*
     定义数组：var a = [];
     任意类型数据都可以放入数组；
@@ -611,7 +645,49 @@ console.log(typeof array1()); //object
     数组的键名实际是字符串，数字最终也会被转化为字符串；
     数组只能用方括号结构，不能用点结构；
 
+    JS用32位的整数存储数组的个数，最大值为2^32-1 ;
 
+    数组的数字键不要求是连续的，数组中属性length的值为键最大整数+1 ;
+
+    手动修改length的值，可以增加/删除数组的元素；
+
+    数组本质上是一种属性，可以键值可以是非数字类型，但length将保持不变；
+
+    数组某个位置是空位，与是undefined是不一样的；
+        在forEach和for...in遍历数组时：会跳过空位，但不会跳过undefined;
+
+    数组和狭义的对象一样，都可以用for...in遍历key；
+        由于会遍历到key不为数字，因此不推荐使用for...in遍历数组，可以使用一般for循环和while循环替换；
+
+    数组也可以用forEach方法遍历；
+ */
+
+console.log("--类似数组的对象--")
+
+var s = "abcd";
+let array7 = Array.prototype.slice.call(s);
+//调用数组的方法
+array7.forEach(function (value) {
+    // console.log(value);
+}); //a b c d
+
+
+var b = "abc";
+Array.prototype.forEach.call(b, function (value, index) {
+    console.log(value)
+}); //a b c
+
+/*
+    类似数组的对象：若对象的键名是正整数或零，且有length属性，这个对象就很像数组。
+        例如：函数的arguments对象，字符串，大多数DOM的元素集；
+
+    若这个对象成员增加了，length不会变化；
+
+    数组的slice方法，可以将"类似数组的对象"转化为真正的数组。
+        所谓真正的数组，就是可以调用数组的方法；
+
+    通过call方法，将让对象拥有数组的某一个方法；
+        这种方法比直接转化为真正的数组慢，建议采用转化为真正数组的方案；
  */
 
 
