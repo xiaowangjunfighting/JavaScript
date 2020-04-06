@@ -586,6 +586,35 @@ eval('console.log("log")');
  */
 
 
+/**
+ * 数组
+ */
+
+function array1() {
+    var a = [];
+    a[0] = 1;
+    a['1'] = 2;
+    a[2] = function () {
+        console.log('I am a function')
+    };
+    return a;
+}
+
+console.log(array1()); //[ 1, 2, [Function (anonymous)] ]
+array1()[2](); //I am a function
+console.log(typeof array1()); //object
+
+/*
+    定义数组：var a = [];
+    任意类型数据都可以放入数组；
+    本质上数组是一种特殊的对象，typeof返回object;
+    数组的键名实际是字符串，数字最终也会被转化为字符串；
+    数组只能用方括号结构，不能用点结构；
+
+
+ */
+
+
 
 
 
